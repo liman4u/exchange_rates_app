@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\GetExchangeRateJob;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Redirect;
+
+use Log;
 
 class RateController extends Controller
 {
@@ -13,7 +18,7 @@ class RateController extends Controller
      */
     public function index()
     {
-        return view
+        return view('welcome');
     }
 
     /**
@@ -34,7 +39,51 @@ class RateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Log::info("Test");
+
+       $rules =  [
+            'base' => 'required',
+            'amount' => 'required | numeric',
+            'target' => 'required'
+        ];
+
+       $validator = Validator::make($request->all(),$rules);
+
+       if($validator->fails()){
+
+           return Redirect::back()
+               ->withErrors($validator);
+       }else{
+
+           $data = $this->dispatch(new GetExchangeRateJob($request));
+
+           //dd($data);
+
+           if($data->success){
+               $rates = (array) $data->rates;
+
+               $base = $request->input('base');
+
+               $target = $request->input('target');
+
+               //dd($rates[$target]);
+
+               $rate = $rates[$target];
+
+
+               return view('rate',compact('rate','base','target'));
+           }else{
+
+
+               return Redirect::back()
+                   ->withError("Could not get rate for ".$request->input('target') ." with base ".$request->input('base'));
+           }
+
+
+
+       }
+
+
     }
 
     /**
