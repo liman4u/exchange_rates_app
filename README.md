@@ -11,3 +11,16 @@ A Simple exchange rate app using Fixer API
  use a different key from Fixer if required)
  - Enter `php artisan serve`
  - Open localhost:8000 or 127.0.0.1:8000 to view app
+ 
+# Screenshots
+#### Home Page
+![Image](screenshots/1.png?raw=true "HomePage")
+
+#### Rate Page
+![Image](screenshots/2.png?raw=true "Rate Page")
+
+#### Error : Required Input
+![Image](screenshots/3.png?raw=true "Error : Required Input")
+
+#### Error : Rate Not Received
+![Image](screenshots/4.png?raw=true "Error : Rate Not Received")
