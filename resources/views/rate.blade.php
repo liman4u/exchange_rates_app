@@ -15,9 +15,15 @@
 </head>
 <body>
 <div class="container">
-    <h2>Exchange Rates App</h2><br/>
+    <h2>Exchange Rates App </h2><br/>
+    @if (\Session::has('success'))
+        <div class="alert alert-success">
 
-    <h3>{{ $rate }}</h3>
+          <b>{!! \Session::get('success') !!}</b>
+
+        </div>
+    @endif
+
 </div>
 </body>
 </html>

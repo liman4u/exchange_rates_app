@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 
 use Log;
+use Session;
 
 class RateController extends Controller
 {
@@ -39,7 +40,9 @@ class RateController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info("Test");
+        //Log::info("Base : ".$request->input('base'));
+        //Log::info("Target : ".$request->input('target'));
+        //Log::info("Amount : ".$request->input('amount'));
 
        $rules =  [
             'base' => 'required',
@@ -59,24 +62,25 @@ class RateController extends Controller
 
            //dd($data);
 
+           $base = $request->input('base');
+
+           $target = $request->input('target');
+
+           $amount = $request->input('amount');
+
            if($data->success){
-               $rates = (array) $data->rates;
 
-               $base = $request->input('base');
+               $rate = $data->result;
 
-               $target = $request->input('target');
+               Session::flash('success', "Rate for ".$amount." ".$base." is ".$rate." ".$target);
 
-               //dd($rates[$target]);
-
-               $rate = $rates[$target];
-
-
-               return view('rate',compact('rate','base','target'));
+               return view('rate');
            }else{
 
+               Log::error("Could not get rate for ".$request->input('target') ." with base ".$request->input('base')." of amount ".$amount);
 
                return Redirect::back()
-                   ->withError("Could not get rate for ".$request->input('target') ." with base ".$request->input('base'));
+                   ->with('failure',"Could not get rate for ".$target ." with base ".$base." of amount ".$amount);
            }
 
 

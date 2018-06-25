@@ -4,6 +4,7 @@ namespace App\Traits;
 
 
 use GuzzleHttp\Client;
+use Log;
 
 trait InteractsWithApi
 {
@@ -17,6 +18,10 @@ trait InteractsWithApi
     public function getFromApi($base,$target,$amount) {
 
         try {
+
+            Log::info("Base : ".$base);
+            Log::info("Target : ".$target);
+            Log::info("Amount : ".$amount);
 
             $apiKey = env('FIXER_API_KEY');
 
